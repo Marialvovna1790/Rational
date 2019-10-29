@@ -1,8 +1,8 @@
 import static java.lang.Math.abs;
 
 public class Rational {
-    private int numerator;
-    private int denominator;
+    private long numerator;
+    private long denominator;
 
     public Rational() {
         numerator = 0;
@@ -10,6 +10,14 @@ public class Rational {
     }
 
     public Rational(int numerator, int denominator) {
+        init(numerator, denominator);
+    }
+
+    private Rational(long numerator, long denominator) {
+        init(numerator, denominator);
+    }
+
+    private void init(long numerator, long denominator) {
         if (denominator == 0) {
             throw new ArithmeticException("division by zero !");
         }
@@ -19,11 +27,12 @@ public class Rational {
         reduce();
     }
 
-    public int getNumerator() {
+
+    public long getNumerator() {
         return numerator;
     }
 
-    public int getDenominator() {
+    public long getDenominator() {
         return denominator;
     }
 
@@ -47,7 +56,7 @@ public class Rational {
         if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
-        Rational rational = (Rational)obj;
+        Rational rational = (Rational) obj;
         return (this.numerator == rational.numerator && this.denominator == rational.denominator);
     }
 
@@ -57,7 +66,7 @@ public class Rational {
         } else if (this.numerator == rational.getNumerator()) {
             return this.denominator > rational.getDenominator();
         } else {
-            return this.numerator * rational.getDenominator() < getNumerator() * this.denominator;
+            return this.numerator * rational.getDenominator() < rational.getNumerator() * this.denominator;
         }
     }
 
@@ -81,18 +90,18 @@ public class Rational {
     }
 
     public Rational minus(Rational rational) {
-        return this.plus( rational.multiply( new Rational(-1, 1) ) );
+        return this.plus(rational.multiply(new Rational(-1, 1)));
     }
 
     public Rational divide(Rational rational) {
         if (rational.getNumerator() == 0) {
             throw new ArithmeticException("division by zero !");
         }
-        return this.multiply( new Rational(rational.getDenominator(), rational.getNumerator()) );
+        return this.multiply(new Rational(rational.getDenominator(), rational.getNumerator()));
     }
 
     private void reduce() {
-        int gcd = getGCD();
+        long gcd = getGCD();
         numerator /= gcd;
         denominator /= gcd;
 
@@ -103,9 +112,9 @@ public class Rational {
         simplifyMinuses();
     }
 
-    private int getGCD() {
-        int n = abs(numerator);
-        int d = abs(denominator);
+    private long getGCD() {
+        long n = abs(numerator);
+        long d = abs(denominator);
 
         while (n > 0 && d > 0) {
             if (n > d) {
